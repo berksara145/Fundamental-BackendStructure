@@ -4,7 +4,7 @@ const express = require('express');
 const isAuth = require('./utils/isAuth');
 require('./Database/mongo');
 const app = express();
-const PORT = 3001;
+const PORT = 8080;
 
 
 
