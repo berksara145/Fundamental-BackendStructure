@@ -60,7 +60,9 @@ router.post('/register', async (request,response) => {
     else {
         const password = hashPassword(request.body.password);
         await User.create({password, email});
-        return response.status(201);
+        return response.status(201).json({
+            message: 'success'
+        });
     }
 });
 
