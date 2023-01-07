@@ -41,7 +41,9 @@ router.post('/login',async (request,response) => {
         
     else{
         console.log('Failed to Authenticate')
-        return response.status(401);
+        return response.status(401).json({
+            message: 'error'
+        });
     }
 });
 
@@ -75,9 +77,9 @@ router.post('/forgotPassword',async (request,response) => {
         const code = Math.floor(100000 + Math.random() * 900000);
 
         //determining expire date
-        const currentDate = new Date();
-        const expireDate = new Date(currentDate.getDate() + 1000*60*5);
         
+        const expireDate = new Date();
+        expireDate.setMinutes(expireDate.getMinutes()+5);
         //forgotPassword object
         const forgotPassword = {
             code,
@@ -92,16 +94,16 @@ router.post('/forgotPassword',async (request,response) => {
 
         //sending email to the related user
         const transporter = nodeMailer.createTransport({
-            service: 'service',
+            service: 'gmail',
             auth: {
-                user: 'host@service.com',
+                user: 'emirkaan184@gmail.com',
                 pass: process.env.HOST_MAIL_PASSWORD
             }
         });
 
         const mailOptions = {
-            from: 'host@service.com',
-            to: email,
+            from: 'emirkaan184@gmail.com',
+            to: 'merakserhat@gmail.com',
             subjects: 'Password Reset',
             text: 'Your verification code is ' + code
         }
@@ -151,11 +153,11 @@ router.post('/checkForgetPasswordCode', async (req,res) => {
         
     }
     const expireDate = userDB.forgotPassword.expireDate;
-    if(code === codeDB )
+    if(code === codeDB && new Date().getDate() <= expireDate.getDate())
     {
         const resetToken = jwt.sign(
             {
-                userDB
+                id: userDB._id
             },
             process.env.SECRET_KEY,
             {
