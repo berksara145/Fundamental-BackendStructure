@@ -66,6 +66,7 @@ router.post('/register', async (request, response) => {
             });
         }
     } catch (error) {
+        console.log(error);
         response.status(500).json({
             message: 'error',
             error: error
