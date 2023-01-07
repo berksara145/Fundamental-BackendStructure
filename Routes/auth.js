@@ -1,5 +1,6 @@
 const { Router } = require('express');
 const User = require('../Database/Schemas/User');
+const nodeMailer = require('nodemailer');
 const { hashPassword, comparePassword} = require('../utils/hashing');
 const jwt = require('jsonwebtoken');
 const dotenv = require('dotenv');
@@ -7,9 +8,11 @@ const dotenv = require('dotenv');
 const router = Router();
 dotenv.config();
 
+
 router.post('/login',async (request,response) => {
+    
     //getting the email and password from the request
-    const {email, password} = request.body;
+    const {email, password} = await request.body;
     if(!email || !password) return response.status(400);
 
     //getting the related user in the database
@@ -27,7 +30,7 @@ router.post('/login',async (request,response) => {
             },
             process.env.SECRET_KEY,
             {
-                expiresIn : 1000 * 60 * 60 * 24 * 30 * 12
+                expiresIn : '1d'
             }
         )
         return response.status(200).json({
@@ -38,21 +41,149 @@ router.post('/login',async (request,response) => {
         
     else{
         console.log('Failed to Authenticate')
-        response.status(401);
+        return response.status(401);
     }
 });
 
 router.post('/register', async (request,response) => {
-    const {email} = request.body;
+    const {email} = await request.body;
+    if(!email){
+        return response.status(400).json({message: 'bad request'})
+    }
+    
     const userDB = await User.findOne({email});
     if(userDB){
-        response.status(400).send({msg: 'User already exist!'});
+        return response.status(400).json({message: 'User already exist!'});
     }
     else {
         const password = hashPassword(request.body.password);
         await User.create({password, email});
-        response.status(201);
+        return response.status(201);
     }
 });
+
+router.post('/forgotPassword',async (request,response) => {
+    const {email} = await request.body;
+    const userDB = await User.findOne({email});
+    if(!email){
+        return response.status(400).json({
+            message: 'Bad Request'
+        });
+    }
+    if(userDB){
+        //6-digit number generate
+        const code = Math.floor(100000 + Math.random() * 900000);
+
+        //determining expire date
+        const currentDate = new Date();
+        const expireDate = new Date(currentDate.getDate() + 1000*60*5);
+        
+        //forgotPassword object
+        const forgotPassword = {
+            code,
+            expireDate
+        };
+
+        //updating the data in the data base
+        User.findOneAndUpdate({email:email},{forgotPassword: forgotPassword},{new: true},(err,data) => {
+            if(err) console.log(err);
+            else console.log(data);
+        });
+
+        //sending email to the related user
+        const transporter = nodeMailer.createTransport({
+            service: 'service',
+            auth: {
+                user: 'host@service.com',
+                pass: process.env.HOST_MAIL_PASSWORD
+            }
+        });
+
+        const mailOptions = {
+            from: 'host@service.com',
+            to: email,
+            subjects: 'Password Reset',
+            text: 'Your verification code is ' + code
+        }
+
+        transporter.sendMail(mailOptions, (error,info) => {
+            if(error){
+                console.log(error);
+            }
+            else{
+                console.log('Email sent: ' + info.response);
+            }
+        })
+            
+        
+        
+        return response.status(200).json(
+           {
+            msg: "success"
+           }
+        );
+    }
+    else 
+        response.status(404).send({msg: 'User does not exist!'});
+});
+
+
+router.post('/checkForgetPasswordCode', async (req,res) => {
+    
+    const {email,code} = await req.body;
+    
+    //checking whtether request is valid
+    if(!email || !code){
+        return res.status(400).send({
+            message: 'bad request'
+        });
+        
+    }
+    //finding the user
+    const userDB = await User.findOne({email: email});
+    if(!userDB){
+        return res.status(404).send({message: 'user does not exist'});
+        
+    }
+    const codeDB = (userDB.forgotPassword) ? userDB.forgotPassword.code : undefined;
+    if(!codeDB){
+        return res.status(404).json({message: 'no validation code'});
+        
+    }
+    const expireDate = userDB.forgotPassword.expireDate;
+    if(code === codeDB )
+    {
+        const resetToken = jwt.sign(
+            {
+                userDB
+            },
+            process.env.SECRET_KEY,
+            {
+                expiresIn: '15m'
+            }
+        );
+        await User.findOneAndUpdate(
+            {
+                email
+            },
+            {
+                resetToken
+            }
+        )
+        return res.status(200).json({message: 'success',resetToken});
+        
+    }
+    else{
+        return res.status(401).json({
+            message: 'code is wrong'
+        })
+       
+    }
+
+});
+
+
+
+
 
 module.exports = router;

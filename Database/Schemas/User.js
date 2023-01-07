@@ -8,9 +8,22 @@ const UserScheama = new mongoose.Schema({
     },
     password: {
         type: mongoose.SchemaTypes.String,
-        required : true,
+        required: true,
+    },
+
+    forgotPassword: {
+        code: {
+            type: mongoose.SchemaTypes.Number,
+        },
+        expireDate: {
+            type: mongoose.SchemaTypes.Date,
+        }
     },
     
+    resetToken: {
+        type: mongoose.SchemaTypes.String
+    },
+
     createdAt: {
         type: mongoose.SchemaTypes.Date,
         required: true,
