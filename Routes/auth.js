@@ -49,12 +49,15 @@ router.post('/login', async (request, response) => {
 
 router.post('/register', async (request, response) => {
     try {
+        console.log('1');
         const { email, password } = request.body;
         if (!email) {
+            
             return response.status(400).json({ message: 'bad request' })
         }
-
+        console.log('2');
         const userDB = await User.findOne({ email });
+        console.log('3');
         if (userDB) {
             return response.status(400).json({ message: 'User already exist!' });
         }
