@@ -16,7 +16,11 @@ app.use((req,res,next) => {
     console.log(`${req.method}:${req.url}`);
     next();
 });
-
+app.get('/',(req,res) => {
+    res.json({
+        message: 'Server acitvated'
+    })
+})
 
 //login and register routes
 app.use('/api/v1/auth',authRoute);
