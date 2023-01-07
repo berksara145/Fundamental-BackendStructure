@@ -29,7 +29,7 @@ app.use('/api/v1/auth',authRoute);
 
 app.use('/api/v1', isAuth ,groceriesRoute);
 
-app.listen(PORT, () => `Port :${PORT}`);
+app.listen(process.env.PORT || PORT, () => `Port :${PORT}`);
 
 
 
