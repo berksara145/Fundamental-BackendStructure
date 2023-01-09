@@ -1,9 +1,20 @@
 const { Router } = require("express");
-const User = require("../Database/Schemas/User");
+const User = require("../models/user");
 const nodeMailer = require("nodemailer");
 const { hashPassword, comparePassword } = require("../utils/hashing");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { login } = require("../controller/authController/loginHandler");
+const { register } = require("../controller/authController/registerHandler");
+const {
+  forgotPassword,
+} = require("../controller/authController/forgotPasswordHandler");
+const {
+  checkForgetPassword,
+} = require("../controller/authController/checkForgetPasswordCodeHandler");
+const {
+  verifyToken,
+} = require("../controller/authController/veryTokenHandler");
 
 const router = Router();
 dotenv.config();
@@ -16,6 +27,6 @@ router.post("/forgotPassword", forgotPassword);
 
 router.post("/checkForgetPasswordCode", checkForgetPassword);
 
-router.post("/validateToken", verifyToken);
+router.post("/verifyToken", verifyToken);
 
 module.exports = router;
