@@ -3,6 +3,7 @@ const authRoute = require('./Routes/auth');
 const express = require('express');
 const isAuth = require('./utils/isAuth');
 require('./Database/mongo');
+const env = require('dotenv')
 const app = express();
 const PORT = 8080;
 
@@ -10,6 +11,10 @@ const PORT = 8080;
 
 app.use(express.json());
 app.use(express.urlencoded());
+
+
+env.config();
+
 
 
 app.use((req,res,next) => {
@@ -28,8 +33,17 @@ app.use('/api/v1/auth',authRoute);
 
 
 app.use('/api/v1', isAuth ,groceriesRoute);
+mongoose
+    .connect(process.env.MONGODB)
+    .then(() => {
+        app.listen(process.env.PORT || PORT, () => `Port :${PORT}`);
+        console.log('Connected to DB');
+    })
+    .catch((err) => console.log(err));
 
-app.listen(process.env.PORT || PORT, () => `Port :${PORT}`);
+;
+
+
 
 
 
