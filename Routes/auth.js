@@ -9,6 +9,9 @@ const {
 const {
   checkForgetPassword,
 } = require("../controller/authController/checkForgetPasswordCodeHandler");
+const {
+  verifyToken,
+} = require("../controller/authController/veryTokenHandler");
 
 const router = Router();
 dotenv.config();
@@ -20,5 +23,7 @@ router.post("/register", register);
 router.post("/forgotPassword", forgotPassword);
 
 router.post("/checkForgetPasswordCode", checkForgetPassword);
+
+router.post("/validateToken", verifyToken);
 
 module.exports = router;
