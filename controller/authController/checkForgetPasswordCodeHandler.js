@@ -2,6 +2,7 @@ const User = require("../../models/user");
 
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const { use } = require("../../Routes/auth");
 
 dotenv.config();
 
@@ -28,6 +29,7 @@ module.exports.checkForgetPassword = async (req, res) => {
     const resetToken = jwt.sign(
       {
         id: userDB._id,
+        email: userDB.email,
       },
       process.env.SECRET_KEY,
       {

@@ -15,6 +15,9 @@ const {
 const {
   verifyToken,
 } = require("../controller/authController/veryTokenHandler");
+const {
+  resetPassword,
+} = require("../controller/authController/resetPasswordHandler");
 
 const router = Router();
 dotenv.config();
@@ -28,5 +31,7 @@ router.post("/forgotPassword", forgotPassword);
 router.post("/checkForgetPasswordCode", checkForgetPassword);
 
 router.post("/verifyToken", verifyToken);
+
+router.post("/resetPassword", resetPassword);
 
 module.exports = router;

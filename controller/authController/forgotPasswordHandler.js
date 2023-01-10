@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-
+const nodeMailer = require("nodemailer");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -27,7 +27,7 @@ module.exports.forgotPassword = async (request, response) => {
     };
 
     //updating the data in the data base
-    User.findOneAndUpdate(
+    await User.findOneAndUpdate(
       { email: email },
       { forgotPassword: forgotPassword },
       { new: true },

@@ -6,7 +6,7 @@ const dotenv = require("dotenv");
 
 module.exports.verifyToken = async (req, res) => {
   try {
-    const { token } = req.body;
+    const { bearerToken } = req.body;
 
     const tokenDecode = jwt.verify(bearerToken, process.env.SECRET_KEY);
 

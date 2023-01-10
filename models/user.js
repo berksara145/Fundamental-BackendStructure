@@ -10,7 +10,9 @@ const UserScheama = new mongoose.Schema({
     type: mongoose.SchemaTypes.String,
     required: true,
   },
-
+  bearerToken: {
+    type: mongoose.SchemaTypes.String,
+  },
   forgotPassword: {
     code: {
       type: mongoose.SchemaTypes.Number,

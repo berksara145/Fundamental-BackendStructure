@@ -1,5 +1,5 @@
 const User = require("../../models/user");
-
+const { hashPassword } = require("../../utils/hashing");
 const dotenv = require("dotenv");
 
 dotenv.config();
@@ -23,8 +23,7 @@ module.exports.register = async (request, response) => {
   } catch (error) {
     console.log(error);
     response.status(500).json({
-      message: "error",
-      error: error,
+      message: "server error",
     });
   }
 };

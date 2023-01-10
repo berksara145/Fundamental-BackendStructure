@@ -4,7 +4,7 @@ const express = require("express");
 const isAuth = require("./utils/isAuth");
 const env = require("dotenv");
 const app = express();
-const PORT = 8080;
+const PORT = 3001;
 const mongoose = require("mongoose");
 
 app.use(express.json());
@@ -27,9 +27,9 @@ app.use("/api/v1/auth", authRoute);
 
 app.use("/api/v1", isAuth, groceriesRoute);
 mongoose
-  .connect(process.env.MONGODB)
+  .connect("mongodb://localhost:27017")
   .then(() => {
-    app.listen(process.env.PORT || PORT, () => `Port :${PORT}`);
+    app.listen(PORT, () => `Port :${PORT}`);
     console.log("Connected to DB");
   })
   .catch((err) => console.log(err));
