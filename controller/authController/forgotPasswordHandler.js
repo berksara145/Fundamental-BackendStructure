@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 module.exports.forgotPassword = async (request, response) => {
-  const { email } = await request.body;
+  const { email } = request.body;
   const userDB = await User.findOne({ email });
   if (!email) {
     return response.status(400).json({
@@ -27,15 +27,18 @@ module.exports.forgotPassword = async (request, response) => {
     };
 
     //updating the data in the data base
-    await User.findOneAndUpdate(
-      { email: email },
-      { forgotPassword: forgotPassword },
-      { new: true },
-      (err, data) => {
-        if (err) console.log(err);
-        else console.log(data);
-      }
-    );
+    // await User.findOneAndUpdate(
+    //   { email: email },
+    //   { forgotPassword: forgotPassword },
+    //   { new: true },
+    //   (err, data) => {
+    //     if (err) console.log(err);
+    //     else console.log(data);
+    //   }
+    // );
+
+    userDB.forgotPassword = forgotPassword;
+    await userDB.save();
 
     //sending email to the related user
     const transporter = nodeMailer.createTransport({
