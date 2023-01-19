@@ -27,7 +27,7 @@ app.use("/api/v1/auth", authRoute);
 
 app.use("/api/v1", isAuth, groceriesRoute);
 mongoose
-  .connect("mongodb://localhost:27017")
+  .connect(process.env.MONGODB)
   .then(() => {
     app.listen(PORT, () => `Port :${PORT}`);
     console.log("Connected to DB");
