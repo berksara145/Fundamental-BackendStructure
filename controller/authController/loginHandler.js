@@ -20,7 +20,10 @@ module.exports.login = async (request, response) => {
     const userDB = await User.findOne({ email });
     if (!userDB)
       return response.status(401).json({
-        message: "user does not exist",
+        message: "error",
+        error: {
+          email: "Email does not exist",
+        },
       });
 
     //comparing whether the password is true
@@ -45,7 +48,10 @@ module.exports.login = async (request, response) => {
     } else {
       console.log("Failed to Authenticate");
       return response.status(401).json({
-        message: "wrong password",
+        message: "error",
+        error: {
+          password: "Password is not correct!",
+        },
       });
     }
   } catch (error) {
