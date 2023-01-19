@@ -8,43 +8,48 @@ const user = require("../../models/user");
 dotenv.config();
 
 module.exports.login = async (request, response) => {
-  //getting the email and password from the request
-  const { email, password } = await request.body;
-  if (!email || !password)
-    return response.status(400).json({
-      message: "bad request",
-    });
+  try {
+    //getting the email and password from the request
+    const { email, password } = await request.body;
+    if (!email || !password)
+      return response.status(400).json({
+        message: "bad request",
+      });
 
-  //getting the related user in the database
-  const userDB = await User.findOne({ email });
-  if (!userDB)
-    return response.status(401).json({
-      message: "user does not exist",
-    });
+    //getting the related user in the database
+    const userDB = await User.findOne({ email });
+    if (!userDB)
+      return response.status(401).json({
+        message: "user does not exist",
+      });
 
-  //comparing whether the password is true
-  const isValid = comparePassword(password, userDB.password);
-  if (isValid) {
-    console.log("Authenticated Successfully!");
-    const token = jwt.sign(
-      {
-        user_id: userDB._id,
-        email: userDB.email,
-      },
-      process.env.SECRET_KEY,
-      {
-        expiresIn: "1d",
-      }
-    );
-    user.findOneAndUpdate({ email: email }, { bearerToken: token });
-    return response.status(200).json({
-      token,
-      message: "success",
-    });
-  } else {
-    console.log("Failed to Authenticate");
-    return response.status(401).json({
-      message: "wrong password",
-    });
+    //comparing whether the password is true
+    const isValid = comparePassword(password, userDB.password);
+    if (isValid) {
+      console.log("Authenticated Successfully!");
+      const token = jwt.sign(
+        {
+          user_id: userDB._id,
+          email: userDB.email,
+        },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: "1d",
+        }
+      );
+      user.findOneAndUpdate({ email: email }, { bearerToken: token });
+      return response.status(200).json({
+        token,
+        message: "success",
+      });
+    } else {
+      console.log("Failed to Authenticate");
+      return response.status(401).json({
+        message: "wrong password",
+      });
+    }
+  } catch (error) {
+    console.log(error);
+    response.status(500).json({ message: "error", error });
   }
 };
