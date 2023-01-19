@@ -29,7 +29,10 @@ app.use("/api/v1", isAuth, groceriesRoute);
 mongoose
   .connect(process.env.MONGODB)
   .then(() => {
-    app.listen(PORT, () => `Port :${PORT}`);
+    app.listen(
+      process.env.PORT || PORT,
+      () => `Port :${process.env.PORT || PORT}`
+    );
     console.log("Connected to DB");
   })
   .catch((err) => console.log(err));
