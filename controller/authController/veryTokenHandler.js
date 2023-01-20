@@ -10,7 +10,7 @@ module.exports.verifyToken = async (req, res) => {
 
     const tokenDecode = jwt.verify(bearerToken, process.env.SECRET_KEY);
 
-    if (tokenDecode.exp - 1000 * 60 * 15 < new Date().getTime()) {
+    if (tokenDecode.exp < new Date().getTime()) {
       // expire olmasına 15dk kalmış, yine de expire olmuş diyelim hata çıkmasın
       return res.status(401).json({ message: "error", error: "Token expired" });
     }
