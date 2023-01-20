@@ -24,7 +24,10 @@ module.exports.search = async (req, res) => {
     //if text is not empty
     else {
       const surahs = await surahDB
-        .find({ "name.nl": { $regex: new RegExp(text, "i") } })
+        .find(
+          { "name.nl": { $regex: new RegExp(text, "i") } },
+          { _id: 1, name: 1, surah_no: 1 }
+        )
         .limit(20);
       res.status(200).json({
         message: "success",
