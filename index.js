@@ -1,4 +1,3 @@
-const groceriesRoute = require("./routes/template");
 const authRoute = require("./routes/auth");
 const express = require("express");
 const isAuth = require("./utils/isAuth");
@@ -26,7 +25,7 @@ app.get("/", (req, res) => {
 //login and register routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
-app.use("/api/v1", isAuth, groceriesRoute);
+
 mongoose
   .connect(process.env.MONGODB)
   .then(() => {
