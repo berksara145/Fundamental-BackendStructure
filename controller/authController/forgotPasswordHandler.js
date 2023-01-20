@@ -26,17 +26,6 @@ module.exports.forgotPassword = async (request, response) => {
       expireDate,
     };
 
-    //updating the data in the data base
-    // await User.findOneAndUpdate(
-    //   { email: email },
-    //   { forgotPassword: forgotPassword },
-    //   { new: true },
-    //   (err, data) => {
-    //     if (err) console.log(err);
-    //     else console.log(data);
-    //   }
-    // );
-
     userDB.forgotPassword = forgotPassword;
     await userDB.save();
 

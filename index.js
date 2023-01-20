@@ -1,7 +1,8 @@
-const groceriesRoute = require("./Routes/template");
-const authRoute = require("./Routes/auth");
+const groceriesRoute = require("./routes/template");
+const authRoute = require("./routes/auth");
 const express = require("express");
 const isAuth = require("./utils/isAuth");
+const userRoute = require("./routes/user");
 const env = require("dotenv");
 const app = express();
 const PORT = 3001;
@@ -24,15 +25,12 @@ app.get("/", (req, res) => {
 
 //login and register routes
 app.use("/api/v1/auth", authRoute);
-
+app.use("/api/v1/user", userRoute);
 app.use("/api/v1", isAuth, groceriesRoute);
 mongoose
   .connect(process.env.MONGODB)
   .then(() => {
-    app.listen(
-      process.env.PORT || PORT,
-      () => `Port :${process.env.PORT || PORT}`
-    );
+    app.listen(PORT, () => `Port :${process.env.PORT || PORT}`);
     console.log("Connected to DB");
   })
   .catch((err) => console.log(err));
