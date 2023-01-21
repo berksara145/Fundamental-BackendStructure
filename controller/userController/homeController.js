@@ -7,7 +7,7 @@ module.exports.home = async (req, res) => {
   try {
     const fatiha = await surahDB.find({
       surah_no: 1,
-    })[0];
+    });
     const surahs = await surahDB
       .find({}, { surah_no: 1, _id: 1, name: 1 })
       .limit(20);
@@ -17,7 +17,7 @@ module.exports.home = async (req, res) => {
       { _id: 1, surah_no: 1, name: 1 }
     );
     res.status(200).json({
-      detailedSurah: fatiha,
+      detailedSurah: fatiha[0],
       surahList: surahs,
       savedSurahs: savedSurahs,
     });
