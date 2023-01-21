@@ -22,12 +22,14 @@ module.exports =
         const user = await User.findById(
           new mongoose.Types.ObjectId(tokenDecode.user_id)
         );
-        req.user = user;
+
         if (!user) {
           return res.status(401).json({
             message: "User not found",
           });
         }
+        req.user = user;
+
         next();
       }
     } catch (error) {

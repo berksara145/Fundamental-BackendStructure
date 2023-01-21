@@ -19,24 +19,19 @@ module.exports.resetPassword = async (req, res) => {
   }
   try {
     const verifyToken = jwt.verify(resetToken, process.env.SECRET_KEY);
-    if (verifyToken.exp < new Date().getTime()) {
-      const userDB = await user.findOne({ email: verifyToken.email });
-      if (!userDB) {
-        return res.status(404).json({
-          message: "user does not exist",
-        });
-      } else {
-        const cryptedPassword = hashPassword(newPassword);
-        await user.findOneAndUpdate(
-          { email: verifyToken.email },
-          { password: cryptedPassword }
-        );
-        return res.status(200).json({ message: "success" });
-      }
-    } else {
-      return res.status(401).json({
-        message: "token expired",
+
+    const userDB = await user.findOne({ email: verifyToken.email });
+    if (!userDB) {
+      return res.status(404).json({
+        message: "user does not exist",
       });
+    } else {
+      const cryptedPassword = hashPassword(newPassword);
+      await user.findOneAndUpdate(
+        { email: verifyToken.email },
+        { password: cryptedPassword }
+      );
+      return res.status(200).json({ message: "success" });
     }
   } catch (error) {
     res.status(401).json({

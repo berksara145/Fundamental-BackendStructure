@@ -37,7 +37,7 @@ module.exports.login = async (request, response) => {
         },
         process.env.SECRET_KEY,
         {
-          expiresIn: "1d", //TODO: expires in one day it can be change
+          expiresIn: "1y", //TODO: expires in one day it can be change
         }
       );
       user.findOneAndUpdate({ email: email }, { bearerToken: token });

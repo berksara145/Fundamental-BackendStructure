@@ -2,32 +2,34 @@ const mongoose = require("mongoose");
 
 const UserScheama = new mongoose.Schema({
   email: {
-    type: mongoose.SchemaTypes.String,
+    type: String,
     required: true,
     unique: true,
   },
   password: {
-    type: mongoose.SchemaTypes.String,
+    type: String,
     required: true,
   },
   bearerToken: {
-    type: mongoose.SchemaTypes.String,
+    type: String,
   },
   forgotPassword: {
     code: {
-      type: mongoose.SchemaTypes.Number,
+      type: Number,
     },
     expireDate: {
-      type: mongoose.SchemaTypes.Date,
+      type: Date,
     },
   },
 
   resetToken: {
-    type: mongoose.SchemaTypes.String,
+    type: String,
   },
 
+  savedSurah: [mongoose.SchemaTypes.ObjectId],
+
   createdAt: {
-    type: mongoose.SchemaTypes.Date,
+    type: Date,
     required: true,
     default: new Date(),
   },

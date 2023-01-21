@@ -2,6 +2,7 @@ const authRoute = require("./routes/auth");
 const express = require("express");
 const isAuth = require("./utils/isAuth");
 const userRoute = require("./routes/user");
+const surahRoute = require("./routes/surah");
 const env = require("dotenv");
 const app = express();
 const PORT = 3001;
@@ -25,6 +26,7 @@ app.get("/", (req, res) => {
 //login and register routes
 app.use("/api/v1/auth", authRoute);
 app.use("/api/v1/user", userRoute);
+app.use("/api/v1/surah", surahRoute);
 
 mongoose
   .connect(process.env.MONGODB)
