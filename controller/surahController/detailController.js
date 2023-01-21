@@ -21,16 +21,15 @@ module.exports.detail = async (req, res) => {
         surah: fatiha,
       });
     } else {
-      try {
-        const surah = await surahDB.findById(mongoose.Types.ObjectId(id));
+      const surah = await surahDB.findById(mongoose.Types.ObjectId(id));
+      if (surah)
         return res.status(200).json({
           surah: surah,
         });
-      } catch (err) {
-        return res.status(200).json({
-          surah: fatiha,
-        });
-      }
+
+      return res.status(200).json({
+        surah: fatiha,
+      });
     }
   } catch (err) {
     res.status(500).json({

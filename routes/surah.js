@@ -5,7 +5,7 @@ const isAuth = require("../utils/isAuth");
 
 const router = Router();
 
-router.get("/search", search);
+router.get("/search", isAuth, search);
 router.get("/detail", isAuth, detail);
 
 module.exports = router;

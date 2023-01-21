@@ -11,10 +11,15 @@ module.exports.home = async (req, res) => {
     const surahs = await surahDB
       .find({}, { surah_no: 1, _id: 1, name: 1 })
       .limit(20);
-    console.log(surahs);
+
+    const savedSurahs = await surahDB.find(
+      { _id: req.user.savedSurah },
+      { _id: 1, surah_no: 1, name: 1 }
+    );
     res.status(200).json({
       detailedSurah: fatiha,
       surahList: surahs,
+      savedSurahs: savedSurahs,
     });
   } catch (err) {
     res.status(500).json({
