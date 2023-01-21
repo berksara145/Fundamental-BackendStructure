@@ -5,9 +5,9 @@ dotenv.config();
 
 module.exports.home = async (req, res) => {
   try {
-    const fatiha = await surahDB.findById(
-      mongoose.Types.ObjectId(process.env.DEFAULT_SURAH_ID)
-    );
+    const fatiha = await surahDB.find({
+      surah_no: 1,
+    });
     const surahs = await surahDB
       .find({}, { surah_no: 1, _id: 1, name: 1 })
       .limit(20);
