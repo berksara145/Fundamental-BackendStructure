@@ -9,9 +9,11 @@ module.exports.verifyToken = async (req, res) => {
     const { bearerToken } = req.body;
 
     const tokenDecode = jwt.verify(bearerToken, process.env.SECRET_KEY);
+    console.log("token received", tokenDecode);
     const user = await User.findById(
       new mongoose.Types.ObjectId(tokenDecode.user_id)
     );
+    console.log("got user: ", user);
 
     return res.status(200).json({ message: "success", user });
   } catch (error) {
