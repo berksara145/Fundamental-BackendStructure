@@ -9,6 +9,13 @@ const surahSchema = new mongoose.Schema({
     {
       kari_name: String, //sesin sahibi **şimdilik serhat dew
       url: String, //şimdilik hepsine şu linki ver
+      intervals: [
+        {
+          verse: [Number],
+          start: Number,
+          end: Number,
+        },
+      ],
     },
   ],
   details: [
