@@ -3,6 +3,7 @@ const User = require("../../models/user");
 const { comparePassword } = require("../../utils/hashing");
 const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
+const mongoose = require("mongoose");
 
 module.exports.verifyToken = async (req, res) => {
   try {
