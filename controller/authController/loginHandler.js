@@ -10,14 +10,14 @@ dotenv.config();
 module.exports.login = async (request, response) => {
   try {
     //getting the email and password from the request
-    const { email, password } = await request.body;
-    if (!email || !password)
+    const { email, password, username } = await request.body;
+    if ((!email && !username) || !password)
       return response.status(400).json({
         message: "bad request",
       });
-
+    const searchFor = email ? email : username;
     //getting the related user in the database
-    const userDB = await User.findOne({ email });
+    const userDB = await User.findOne({ searchFor });
     if (!userDB)
       return response.status(401).json({
         message: "error",

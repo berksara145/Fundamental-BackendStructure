@@ -6,8 +6,8 @@ dotenv.config();
 
 module.exports.register = async (request, response) => {
   try {
-    const { email, password } = request.body;
-    if (!email) {
+    const { email, password, username } = request.body;
+    if (!email || !username) {
       return response.status(400).json({ message: "bad request" });
     }
     const userDB = await User.findOne({ email });
@@ -15,7 +15,7 @@ module.exports.register = async (request, response) => {
       return response.status(400).json({ message: "User already exist!" });
     } else {
       const HashPassword = hashPassword(password);
-      await User.create({ password: HashPassword, email });
+      await User.create({ password: HashPassword, email, username });
       return response.status(201).json({
         message: "success",
       });
