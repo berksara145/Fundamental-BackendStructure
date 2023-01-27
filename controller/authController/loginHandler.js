@@ -15,9 +15,13 @@ module.exports.login = async (request, response) => {
       return response.status(400).json({
         message: "bad request",
       });
-    const searchFor = email ? email : username;
+
+    const filter = {};
+    if (email) filter.email = email;
+    else filter.username = username;
+
     //getting the related user in the database
-    const userDB = await User.findOne({ searchFor });
+    const userDB = await User.findOne(filter);
     console.log(userDB);
     if (!userDB)
       return response.status(401).json({
