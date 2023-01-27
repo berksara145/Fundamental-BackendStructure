@@ -16,36 +16,41 @@ module.exports.edit = async (req, res) => {
         message: "bad request",
       });
     }
-    const usernamedb = await user.findOne({ username });
+    // const usernamedb = await user.findOne({ username });
     const emaildb = await user.findOne({ email });
 
-    if (usernamedb && emaildb) {
+    // if (usernamedb && emaildb) {
+    //   return res.status(403).json({
+    //     error: "error",
+    //     message: ["username", "email"],
+    //   });
+    // } else
+    if (emaildb) {
       return res.status(403).json({
-        error: "error",
-        message: ["username", "email"],
-      });
-    } else if (emaildb) {
-      return res.status(403).json({
-        error: "error",
-        message: ["email"],
-      });
-    } else if (usernamedb) {
-      return res.status(403).json({
-        error: "error",
-        message: ["username"],
-      });
-    } else {
-      if (email && !emaildb) {
-        req.user.email = email;
-      }
-      if (username && !username) {
-        req.user.username = username;
-      }
-      await req.user.save();
-      return res.status(200).json({
-        message: "success",
+        message: "error",
+        error: { email: "This email already exists" },
       });
     }
+
+    // if (usernamedb) {
+    //   return res.status(403).json({
+    //     error: "error",
+    //     message: ["username"],
+    //   });
+    // }
+
+    if (email) {
+      req.user.email = email;
+    }
+    if (username) {
+      req.user.username = username;
+    }
+
+    const user = await req.user.save();
+    return res.status(201).json({
+      message: "success",
+      user,
+    });
   } catch {
     return res.status(500).json({
       message: "server error",
