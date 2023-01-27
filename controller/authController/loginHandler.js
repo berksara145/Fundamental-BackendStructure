@@ -18,6 +18,7 @@ module.exports.login = async (request, response) => {
     const searchFor = email ? email : username;
     //getting the related user in the database
     const userDB = await User.findOne({ searchFor });
+    console.log(userDB);
     if (!userDB)
       return response.status(401).json({
         message: "error",
