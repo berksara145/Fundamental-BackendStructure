@@ -47,6 +47,7 @@ module.exports.edit = async (req, res) => {
     }
 
     const user = await req.user.save();
+    console.log("user", user);
     return res.status(201).json({
       message: "success",
       user,
