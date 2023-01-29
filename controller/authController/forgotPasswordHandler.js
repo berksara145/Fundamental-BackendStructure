@@ -40,7 +40,7 @@ module.exports.forgotPassword = async (request, response) => {
 
     const mailOptions = {
       from: "emirkaan184@gmail.com",
-      to: "merakserhat@gmail.com",
+      to: email,
       subjects: "Password Reset",
       text: "Your verification code is " + code,
     };

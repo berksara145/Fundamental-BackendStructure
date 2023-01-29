@@ -24,7 +24,10 @@ module.exports.checkForgetPassword = async (req, res) => {
     return res.status(404).json({ message: "no validation code" });
   }
   const expireDate = userDB.forgotPassword.expireDate;
-  if (code === codeDB && new Date().getDate() <= expireDate.getDate()) {
+  if (
+    toString(code) === toString(codeDB) &&
+    new Date().getDate() <= expireDate.getDate()
+  ) {
     const resetToken = jwt.sign(
       {
         id: userDB._id,
