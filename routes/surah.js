@@ -8,8 +8,10 @@ const isAuth = require("../utils/isAuth");
 
 const router = Router();
 
-router.get("/search", isAuth, search);
-router.get("/detail", isAuth, detail);
+router.get("/search", search);
+router.get("/detail", detail);
+
+//admin
 router.post("/loadInterval", isAuth, loadInterval);
 
 module.exports = router;
