@@ -6,7 +6,7 @@ const isAuth = require("../utils/isAuth");
 
 const router = Router();
 
-router.get("/home", isAuth, home);
+router.get("/home", home);
 router.post("/save", isAuth, save);
 router.post("/edit", isAuth, edit);
 
