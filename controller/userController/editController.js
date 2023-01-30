@@ -16,6 +16,8 @@ module.exports.edit = async (req, res) => {
         message: "bad request",
       });
     }
+
+    console.log("Edit called with parameters: ", email, username);
     // const usernamedb = await user.findOne({ username });
     const emaildb = await user.findOne({ email });
 
@@ -39,6 +41,7 @@ module.exports.edit = async (req, res) => {
     //   });
     // }
 
+    console.log("before assigning email and username");
     if (email) {
       req.user.email = email;
     }
@@ -46,13 +49,16 @@ module.exports.edit = async (req, res) => {
       req.user.username = username;
     }
 
+    console.log("after assigned");
+
     const user = await req.user.save();
     console.log("user", user);
     return res.status(201).json({
       message: "success",
       user,
     });
-  } catch {
+  } catch (error) {
+    console.log("error", error);
     return res.status(500).json({
       message: "server error",
     });
