@@ -1,7 +1,7 @@
 const express = require("express");
 const { default: mongoose } = require("mongoose");
 const surahDB = require("../../models/surah");
-const user = require("../../models/user");
+const User = require("../../models/user");
 /**
  *
  * @param {express.Request} req
@@ -19,7 +19,7 @@ module.exports.edit = async (req, res) => {
 
     console.log("Edit called with parameters: ", email, username);
     // const usernamedb = await user.findOne({ username });
-    const emaildb = await user.findOne({ email });
+    const emaildb = await User.findOne({ email });
 
     // if (usernamedb && emaildb) {
     //   return res.status(403).json({
